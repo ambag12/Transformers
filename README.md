@@ -1,119 +1,168 @@
-This code explains on how to use and fine tune multiple Transformers like BERT and GPT
+Transformer & Sequence Model Showcase
+This repository compiles multiple code examples that demonstrate how to use and fine-tune several Transformer models and sequence learning techniques. The projects include:
 
-Bert Fine-Tuning
-This project demonstrates how to fine-tune the bert-base-uncased model from Hugging Face's Transformers library for a sequence classification task. The code uses a custom PyTorch dataset to prepare a small sample of texts and their corresponding binary labels, sets up training using Hugging Face's Trainer API, and saves the fine-tuned model and tokenizer for later use.
+BERT Fine-Tuning for sequence classification
+
+GPT-2 Fine-Tuning for causal language modeling
+
+GLUE MRPC Data Processing for tokenization and collation
+
+LangTranslator, featuring two translation approaches:
+
+T5-based translation using conditional generation
+
+Sequence-to-Sequence translation with LSTM (TensorFlow/Keras)
+
+Self-Attention Mechanism demonstrated using NumPy
+
+Table of Contents
+BERT Fine-Tuning
+
+GPT-2 Fine-Tuning
+
+GLUE MRPC Data Processing
+
+LangTranslator
+
+T5-based Translation
+
+Seq2Seq Translation with LSTM
+
+Self-Attention Mechanism
+
+Installation & Usage
+
+License
+
+BERT Fine-Tuning
+This project demonstrates how to fine-tune the bert-base-uncased model for a sequence classification task using Hugging Face's Transformers library and PyTorch.
 
 Overview
-The repository contains a single Python script that performs the following tasks:
-
 Imports Required Libraries:
-Uses the Transformers library along with PyTorch to build and train the model.
+Integrates the Transformers library with PyTorch to build and train the model.
 
-Loads Pretrained BERT Model and Tokenizer:
-Uses BertTokenizer and BertForSequenceClassification from the Transformers library to load the default BERT model pre-trained on uncased English text. The model is adjusted for a binary classification task (num_labels=2).
+Loads Pretrained Model and Tokenizer:
+Utilizes BertTokenizer and BertForSequenceClassification to load the pre-trained BERT model adjusted for binary classification (using num_labels=2).
 
 Defines a Custom Dataset:
-The CustomDataset class inherits from torch.utils.data.Dataset and:
+Implements a CustomDataset class (inheriting from torch.utils.data.Dataset) that:
 
 Tokenizes input texts using the provided tokenizer.
 
-Pads/truncates texts to a fixed maximum length (default of 128 tokens).
+Pads and truncates texts to a fixed maximum length (default 128 tokens).
 
-Converts texts and labels into tensors suitable for training.
+Converts texts and labels into tensors for training.
 
 Prepares Sample Data:
-The code includes hardcoded sample texts and labels that are split into a training set and an evaluation set.
+Uses hardcoded sample texts and binary labels split into training and evaluation sets.
 
-Sets Up Training Configuration:
-Uses TrainingArguments to define the training parameters (e.g., number of epochs, batch size, logging and evaluation strategy) and Trainer to manage the training loop.
+Training Configuration & Execution:
+Configures training parameters via TrainingArguments and the Trainer class, fine-tunes the model, and saves both the model and tokenizer locally.
 
-Starts Training and Saves the Model:
-Fine-tunes the BERT model on the custom dataset, prints a message when fine-tuning is complete, and then saves the model and tokenizer to local directories.
-
-GPT Fine-Tuning
-This project demonstrates how to fine-tune the GPT-2 model from Hugging Face's Transformers library for a causal language modeling task. The provided code uses a small text dataset and temporarily stores it for training. After fine-tuning, the model and tokenizer are saved locally for later use.
-
+GPT-2 Fine-Tuning
+This example fine-tunes the GPT-2 model for a causal language modeling task.
 
 Overview
-The project performs the following tasks:
-
 Loading Pretrained Model and Tokenizer:
-The project uses the GPT-2 model along with its corresponding tokenizer via AutoModelForCausalLM and AutoTokenizer.
+Uses AutoModelForCausalLM and AutoTokenizer to load the GPT-2 model and its tokenizer.
 
 Preparing the Dataset:
-A sample text containing news-like paragraphs is written to a temporary file and loaded as a dataset using the TextDataset utility.
+A small text dataset (comprising news-like paragraphs) is written to a temporary file, then loaded using the TextDataset utility.
 
 Data Collation:
-The DataCollatorForLanguageModeling prepares the data for the causal language modeling task (with masked language modeling disabled).
+Utilizes DataCollatorForLanguageModeling to prepare data for the language modeling task (with masked language modeling disabled).
 
-Model Training:
-The training configuration is set using TrainingArguments and the model is fine-tuned using the Trainer class for one epoch on the small dataset.
+Training & Saving:
+Configures training with TrainingArguments and fine-tunes the model using the Trainer class. After training, the fine-tuned model and tokenizer are saved locally.
 
-Saving the Fine-Tuned Model:
-Once training is complete, both the model and the tokenizer are saved locally for future inference or further fine-tuning.
-
-Glue
-
-This repository demonstrates how to load, tokenize, and collate data from the GLUE MRPC dataset using Hugging Face’s Datasets and Transformers libraries. The provided code snippet processes sentence pairs from the dataset, applies padding and truncation, and then prepares a collated batch for further processing. Finally, the collated tensor is saved to disk for future use.
+GLUE MRPC Data Processing
+This section demonstrates how to load, tokenize, and collate data from the GLUE MRPC dataset using the Hugging Face Datasets and Transformers libraries.
 
 Overview
-The project performs the following tasks:
-
 Dataset Loading:
-Uses the Hugging Face Datasets library to load the GLUE MRPC dataset.
+Loads the GLUE MRPC dataset using the Hugging Face Datasets library.
 
 Tokenization:
-Utilizes the BERT tokenizer (from the bert-base-uncased checkpoint) to tokenize sentence pairs from the dataset. This includes examples with:
+Applies the BERT tokenizer (bert-base-uncased) for:
 
-Single sentence tokenization.
+Single-sentence tokenization.
 
-Paired sentence tokenization.
+Paired-sentence tokenization.
 
-Conversion of token IDs back to tokens.
+Conversion of token IDs back into tokens.
 
 Collation:
-Applies a data collator (with padding) to a batch of tokenized samples to create tensors of consistent size.
+Uses a data collator (with padding) to create uniformly sized tensors from a batch of tokenized samples.
 
-Batch Saving:
-Saves the collated batch tensor as a PyTorch file (glue_mrpc_labled_tensor.pt).
+Output:
+Saves the collated tensor as a PyTorch file (glue_mrpc_labled_tensor.pt).
 
-LangTranslator:
+LangTranslator
+This repository offers two approaches to language translation:
 
-
-This repository contains code examples for two translation approaches:
-
-T5-based Translation:
-Uses the pre-trained T5 model (e.g., t5-small) from Hugging Face for conditional generation tasks to perform language translation. This example shows how to wrap the translation logic in a function that formats an input prompt (based on the source and target languages), tokenizes the text, generates a translated output, and decodes the tokens back to text.
-
-Seq2Seq Translation with LSTM:
-Demonstrates a custom sequence-to-sequence translation model implemented in TensorFlow and Keras. In this approach, the model uses an encoder–decoder architecture with LSTM layers.
-
-Data preparation: The code shows how to preprocess paired sentences (input and target) by tokenizing, adding start-of-sequence (<sos>) and end-of-sequence (<eos>) tokens, and padding sequences.
-
-Model definition: An encoder processes the input sentence, and a decoder generates the translation by predicting tokens until the <eos> token is produced.
-
-Training: The model is compiled using sparse_categorical_crossentropy loss and optimized with Adam. A custom translation function demonstrates inference with the trained encoder and decoder models.
-
-
-Self_attention
-
-
-This project demonstrates a basic implementation of the self-attention mechanism using NumPy. The code generates simple word embeddings for a given sentence, computes self-attention scores, and then outputs both the attention weights and the weighted embeddings. It also provides a brief analysis by identifying, for each word, the other word that receives the second-highest attention (ignoring self-attention).
+T5-based Translation
+Uses the pre-trained T5 model (e.g., t5-small) for conditional generation tasks to perform language translation.
 
 Overview
-The main components of the code include:
+Model and Tokenizer Setup:
+Loads T5 using T5ForConditionalGeneration and its tokenizer via T5Tokenizer.
 
+Translation Function:
+A function formats an input prompt based on the source and target languages, tokenizes the text, generates translated tokens, and decodes the output.
+
+Example:
+The code runs a test translation, printing both the tokenized inputs for debugging and the final translated output.
+
+Seq2Seq Translation with LSTM
+Demonstrates a custom sequence-to-sequence translation model implemented in TensorFlow and Keras using an encoder–decoder architecture with LSTM layers.
+
+Overview
+Data Preparation:
+Processes paired sentences (input and target) by tokenizing, adding start-of-sequence <sos> and end-of-sequence <eos> tokens, and padding sequences.
+
+Model Definition:
+Builds an encoder using an Embedding layer and an LSTM, and a decoder that utilizes the encoder's state to generate translations sequentially.
+
+Training & Inference:
+The model is trained using sparse categorical cross-entropy loss with the Adam optimizer. An inference function demonstrates generating translations token-by-token until the <eos> token is produced.
+
+Self-Attention Mechanism
+A basic implementation of the self-attention mechanism is provided using NumPy.
+
+Overview
 Embedding Generation:
-A simple function build_embeddings creates a random 4-dimensional embedding for each word in the input sentence. The random seed is fixed (500) to ensure reproducibility.
+A build_embeddings function creates random 4-dimensional embeddings for each word in a given sentence. A fixed random seed (500) ensures reproducibility.
 
 Self-Attention Calculation:
-The self_attention function creates query (Q), key (K), and value (V) matrices from the generated embeddings. It calculates the attention scores using the dot product of Q and K and then applies the softmax function to get the attention weights. These weights are used to compute the final weighted value vectors.
+The self_attention function:
+
+Constructs Query (Q), Key (K), and Value (V) matrices.
+
+Computes attention scores using the dot product of Q and K.
+
+Applies the softmax function to obtain attention weights.
+
+Generates weighted embeddings by combining the attention weights with the V matrix.
 
 Analysis and Output:
-The code prints the original sentence, and for each word, it:
+The script prints:
 
-Displays the indices of the top three words with the highest attention.
+The original sentence.
 
-Prints detailed attention weights for these top words.
+For each word, the indices and corresponding attention weights of the top three words that it attends to.
 
-Explains which word (excluding self-attention) receives the second-highest attention for every input word.
+An explanation of which word (other than itself) receives the second-highest attention.
+
+Installation & Usage
+Requirements
+Python 3.7+
+
+PyTorch
+
+TensorFlow (for the Seq2Seq translation)
+
+Transformers
+
+Datasets
+
+NumPy
